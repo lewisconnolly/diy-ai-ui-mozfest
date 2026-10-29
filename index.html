@@ -1,3 +1,82 @@
+<style>
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  body {
+    position: relative;
+    overflow-x: hidden;
+    background: #f4eef8; /* pearl base */
+    font-family: sans-serif;
+  }
+
+  /* drifting oil-slick blobs */
+  body::before,
+  body::after {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  body::before {
+    background:
+      radial-gradient(circle at 20% 30%, #ff9ad5 0%, transparent 35%),
+      radial-gradient(circle at 75% 25%, #8ef6e4 0%, transparent 35%),
+      radial-gradient(circle at 60% 75%, #c3a6ff 0%, transparent 40%),
+      radial-gradient(circle at 30% 80%, #fff3a8 0%, transparent 35%),
+      radial-gradient(circle at 50% 50%, #9ad0ff 0%, transparent 45%);
+    filter: blur(40px) saturate(1.4);
+    animation: drift 24s ease-in-out infinite alternate,
+               shimmer 12s linear infinite;
+  }
+
+  /* iridescent swirl sheen layered on top */
+  body::after {
+    background:
+      repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        rgba(255, 0, 170, 0.25) 0deg,
+        rgba(0, 255, 200, 0.25) 30deg,
+        rgba(120, 80, 255, 0.25) 60deg,
+        rgba(255, 230, 0, 0.25) 90deg,
+        rgba(255, 0, 170, 0.25) 120deg
+      );
+    mix-blend-mode: overlay;
+    filter: blur(60px);
+    animation: swirl 40s linear infinite;
+  }
+
+  @keyframes drift {
+    0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50%  { transform: translate(6%, -4%) rotate(25deg) scale(1.15); }
+    100% { transform: translate(-5%, 5%) rotate(-20deg) scale(1.05); }
+  }
+
+  @keyframes shimmer {
+    from { filter: blur(40px) saturate(1.4) hue-rotate(0deg); }
+    to   { filter: blur(40px) saturate(1.4) hue-rotate(360deg); }
+  }
+
+  @keyframes swirl {
+    from { transform: rotate(0deg) scale(1.2); }
+    to   { transform: rotate(360deg) scale(1.2); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::before,
+    body::after {
+      animation: none;
+    }
+  }
+
+  center {
+    padding-top: 15vh;
+  }
+</style>
+
 <center>
   <h1>Enter a word:</h1>
   <span>0 / 15</span>
