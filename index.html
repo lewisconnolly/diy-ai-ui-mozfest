@@ -1,0 +1,113 @@
+<center>
+  <h1>Enter a word:</h1>
+  <span>0 / 15</span>
+  <input placeholder="a word to explode" maxlength="15">
+  <button>run</button>
+  <p>...</p>
+</center>
+
+
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library@1.0.1/build/nn.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-machine-learning@0.1.0/src/nn-prompt.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+<script>
+  
+  function updateUI () {    
+    let word = nn.get('input').value
+    nn.get('span').content(`${word.length} / 15`)
+    
+    if (word.length === 15) {
+      nn.get('span').css('color', 'red')
+    } else {
+      nn.get('span').css('color', 'black')
+    }
+  }
+  
+  async function send () {
+    nn.get('p').content('...exploding...')
+    let reply
+    let prompt = `A same-sounding phrase is a phrase that sounds like another word or phrase.
+  Here is a same-sounding phrase for the word "paradise":
+  pair a dice (two dice)
+  Here is a same-sounding phrase for the word "carpet":
+  car pet (an animal that lives in your car)
+  Here is a same-sounding phrase for the word "antelope":
+  ant elope (two insects running off to get married)
+  Here is a same-sounding phrase for the word "forgiven":
+  four give in (a group of four surrenders)
+  Here is a same-sounding phrase for the word "defeat":
+  da feet (as in "the" feet)
+  Here is a same-sounding phrase for the word "defeat":
+  deaf eat (can't hear while eating)
+  Here is a same-sounding phrase for the word "surprise":
+  Sir Prize (a knight whose name is Prize)
+  Here is a same-sounding phrase for the word "surprise":
+  serf prize (award given to a feudal laborer)
+  Here is a same-sounding phrase for the word "weapon":
+  weep on (to cry on)
+  Here is a same-sounding phrase for the word "weapon":
+  wee pawn (a tiny chess piece)
+  Here is a same-sounding phrase for the word "stabilize":
+  stable eyes (a steady gaze)
+  Here is a same-sounding phrase for the word "adoration":
+  add oration (to include a formal speech)
+  Here is a same-sounding phrase for the word "ridiculous":
+  ridicule us (to shame us collectively)
+  Here is a same-sounding phrase for the word "ridiculous":
+  ridicule less (to be less scornful)
+  Here is a same-sounding phrase for the word "sensation":
+  sensei shun (to avoid your martial arts teacher)
+  Here is a same-sounding phrase for the word "sensation":
+  sin say shun (to admit your sins and become a pariah)
+  Here is a same-sounding phrase for the word "recognize":
+  wreck on eyes (so visually outrageous that it's painful)
+  Here is a same-sounding phrase for the word "recognize":
+  wreck on ice (to wipe out on a frozen pond)
+  Here is a same-sounding phrase for the word "recognize":
+  re-cognize (to fix broken gears in a clock)
+  Here is a same-sounding phrase for the word "American":
+  I'm arrogant (self-admission of haughtiness)
+  Here is a same-sounding phrase for the word "American":
+  aim Eric can (Eric is a skilled marksman)
+  Here is a same-sounding phrase for the word "recollection":
+  wreck collection (cleanup after a traffic accident)
+  Here is a same-sounding phrase for the word "euthanasia":
+  youth in Asia (youngsters in Asia)
+  Here is a same-sounding phrase for the word "depend":
+  deep end (deep section of a swimming pool)
+  Here is a same-sounding phrase for the word "gemini":
+  gem in eye (a precious stone lodged in the cornea)
+  Here is a same-sounding phrase for the word "example":
+  egg sample (a trial tasting of an egg)
+  Here is a same-sounding phrase for the word "initiate":
+  and then she ate (and she subsequently ate)
+  Here is a same-sounding phrase for the word "innuendo":
+  in your window (perched on your windowsill)
+  Here is a same-sounding phrase for the word "moustache":
+  must ask (need to inquire)
+  Here is a same-sounding phrase for the word "mystery":
+  missed hurry (overlooked haste)
+  
+  Here is a same-sounding phrase for the word "${nn.get('input').value}":`
+    
+    try {
+      reply = await nn.prompt({
+        provider: 'generic',
+        url: 'http://localhost:7778/v1/chat/completions',
+        model: 'rondo-model', 
+        message: prompt
+      })
+    } catch (err) {
+      nn.get('input').value = ''
+      nn.get('p').content('<i>network error, try again</i>')
+    }
+
+
+    const html = marked.parse(reply.text)
+    nn.get('p').content(html)
+  }
+  
+  nn.get('button').on('click', send)
+  nn.get('input').on('input', updateUI)
+
+</script>
